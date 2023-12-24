@@ -2,6 +2,7 @@ package main
 
 import (
 	"errors"
+	"fmt"
 	"github.com/pelletier/go-toml"
 	"github.com/sandertv/gophertunnel/minecraft"
 	"github.com/sandertv/gophertunnel/minecraft/auth"
@@ -46,6 +47,7 @@ func handleConn(conn *minecraft.Conn, listener *minecraft.Listener, config confi
 		TokenSource: src,
 		ClientData:  conn.ClientData(),
 	}.Dial("raknet", config.Connection.RemoteAddress)
+	_, _ = os.Stdout.Write([]byte(fmt.Sprintf("New connection: %s", conn.IdentityData().DisplayName)))
 	if err != nil {
 		panic(err)
 	}

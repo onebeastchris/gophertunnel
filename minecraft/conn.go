@@ -22,6 +22,7 @@ import (
 	"io"
 	"log"
 	"net"
+	"os"
 	"strings"
 	"sync"
 	"sync/atomic"
@@ -333,6 +334,8 @@ func (conn *Conn) WritePacket(pk packet.Packet) error {
 
 	for _, converted := range conn.proto.ConvertFromLatest(pk, conn) {
 		converted.Marshal(conn.proto.NewWriter(buf, conn.shieldID.Load()))
+
+		_, _ = os.Stdout.Write([]byte(fmt.Sprintf("packet %q", converted)))
 
 		if conn.packetFunc != nil {
 			conn.packetFunc(*conn.hdr, buf.Bytes()[l:], conn.LocalAddr(), conn.RemoteAddr())
